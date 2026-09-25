@@ -1,0 +1,40 @@
+<%- include('partials/header') %>
+
+<div class="detail-container">
+  <a href="/" class="back-link">&larr; Retour aux offres</a>
+
+  <article class="detail-card">
+    <div class="detail-header">
+      <span class="badge badge-<%= offre.type_contrat.toLowerCase() %>"><%= offre.type_contrat %></span>
+      <h1><%= offre.titre %></h1>
+      <h2>Entreprise : <%= offre.entreprise_nom %></h2>
+      <p class="location">📍 <%= offre.ville %></p>
+      <p class="date">Publié le <%= new Date(offre.date_publication).toLocaleDateString('fr-FR') %></p>
+    </div>
+
+    <div class="detail-body">
+      <h3>Description du poste</h3>
+      <p><%= offre.description_detaillee %></p>
+
+      <h3>Profil recherché</h3>
+      <p><%= offre.profil_recherche || 'Aucun profil spécifique requis.' %></p>
+
+      <% if (offre.technologies) { %>
+        <h3>Technologies requises</h3>
+        <div class="tech-tags">
+          <% offre.technologies.split(', ').forEach(function(tech) { %>
+            <span class="tag"><%= tech %></span>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <div class="apply-box">
+        <h3>Postuler</h3>
+        <p>Pour soumettre votre candidature, contactez :</p>
+        <p><strong><%= offre.lien_candidature %></strong></p>
+      </div>
+    </div>
+  </article>
+</div>
+
+<%- include('partials/footer') %>
