@@ -1,42 +1,106 @@
 <%- include('../partials/header') %>
 
-<section class="admin-dashboard">
-  <div class="admin-header">
-    <h1>Administration des offres</h1>
-    <a href="/admin/offres/nouveau" class="btn btn-primary">+ Déposer / Créer une offre</a>
-  </div>
+<main class="page-space">
+  <div class="container">
+    <div class="admin-page-head">
+      <div>
+        <span class="eyebrow">♙ BACK-OFFICE SIMPLIFIÉ</span>
+        <h1>Gestion des offres</h1>
+        <p class="muted">Espace d'administration MERN / Express & MySQL. Contrôlez et modérez les publications en temps réel.</p>
+      </div>
+      <a class="btn btn-primary" href="/admin/offres/nouveau">⊕ + Ajouter une nouvelle offre</a>
+    </div>
 
-  <table class="table-admin">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Titre</th>
-        <th>Entreprise</th>
-        <th>Type</th>
-        <th>Ville</th>
-        <th>Date</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% offres.forEach(function(offre) { %>
-        <tr>
-          <td><%= offre.id %></td>
-          <td><strong><%= offre.titre %></strong></td>
-          <td><%= offre.entreprise_nom %></td>
-          <td><span class="badge badge-<%= offre.type_contrat.toLowerCase() %>"><%= offre.type_contrat %></span></td>
-          <td><%= offre.ville %></td>
-          <td><%= new Date(offre.date_publication).toLocaleDateString('fr-FR') %></td>
-          <td class="table-actions">
-            <a href="/admin/offres/<%= offre.id %>/edit" class="btn-sm btn-edit">Modifier</a>
-            <form action="/admin/offres/<%= offre.id %>/delete" method="POST" onsubmit="return confirm('Confirmer la suppression ?');" style="display:inline;">
-              <button type="submit" class="btn-sm btn-delete">Supprimer</button>
-            </form>
-          </td>
-        </tr>
+    <div class="admin-stats">
+      <div class="panel stat-card"><span>Total des offres</span><strong><%= offres.length %></strong></div>
+      <div class="panel stat-card"><span>Stages</span><strong><%= offres.filter(o => o.type_contrat === 'Stage').length %></strong></div>
+      <div class="panel stat-card"><span>Alternances</span><strong><%= offres.filter(o => o.type_contrat === 'Alternance').length %></strong></div>
+      <div class="panel stat-card"><span>Actives</span><strong><%= offres.length %></strong></div>
+    </div>
+
+    <form class="admin-search">
+      <input class="field" placeholder="⌕ Rechercher une offre, entreprise...">
+      <select class="field"><option>Tous les statuts</option></select>
+      <button class="btn btn-secondary">☷ Filtres</button>
+    </form>
+
+    <div class="mobile-admin-tabs">
+      <button class="active">Toutes les offres (<%= offres.length %>)</button>
+      <button>Stages (<%= offres.filter(o => o.type_contrat === 'Stage').length %>)</button>
+      <button>Alternances (<%= offres.filter(o => o.type_contrat === 'Alternance').length %>)</button>
+    </div>
+
+    <!-- Mobile view cards -->
+    <div class="mobile-admin-cards">
+      <% offres.forEach(function(offre) { 
+           const initials = offre.entreprise_nom ? offre.entreprise_nom.split(" ").map(w => w[0]).join("").toUpperCase() : "ENT";
+      %>
+      <article class="panel admin-mobile-card">
+        <div class="admin-mobile-top">
+          <div class="logo-box"><%= initials %></div>
+          <div style="min-width:0">
+            <h3><%= offre.titre %></h3>
+            <div class="company-line"><%= offre.entreprise_nom %> • <%= offre.ville %></div>
+          </div>
+          <span class="badge badge-contract" style="margin-left:auto">Actif</span>
+        </div>
+        <div class="admin-mobile-meta">
+          <span>▣ <%= offre.type_contrat %></span>
+          <span>▣ <%= new Date(offre.date_publication).toLocaleDateString('fr-FR') %></span>
+        </div>
+        <div class="admin-mobile-actions">
+          <a class="btn btn-secondary" href="/offres/<%= offre.id %>">◉ Voir</a>
+          <a class="btn btn-secondary" href="/admin/offres/<%= offre.id %>/edit">✎ Modifier</a>
+          <form action="/admin/offres/<%= offre.id %>/delete" method="POST" onsubmit="return confirm('Confirmer la suppression ?');" style="display:inline;">
+             <button class="btn btn-danger-soft" type="submit">▥ Supprimer</button>
+          </form>
+        </div>
+      </article>
       <% }); %>
-    </tbody>
-  </table>
-</section>
+    </div>
+
+    <!-- Desktop view table -->
+    <div class="panel table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Titre du poste</th>
+            <th>Entreprise</th>
+            <th>Ville</th>
+            <th>Contrat</th>
+            <th>Date de publication</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% offres.forEach(function(offre) { %>
+          <tr>
+            <td>
+              <strong><%= offre.titre %></strong><br>
+              <span class="muted small">REF-<%= new Date(offre.date_publication).getFullYear() %>-<%= String(offre.id).padStart(3, '0') %></span>
+            </td>
+            <td><%= offre.entreprise_nom %></td>
+            <td><%= offre.ville %></td>
+            <td><span class="badge badge-contract"><%= offre.type_contrat %></span></td>
+            <td><%= new Date(offre.date_publication).toLocaleDateString('fr-FR') %></td>
+            <td><span class="badge">Actif</span></td>
+            <td>
+              <div class="table-actions">
+                <a class="icon-action" href="/offres/<%= offre.id %>">◉</a>
+                <a class="icon-action" href="/admin/offres/<%= offre.id %>/edit">✎</a>
+                <form action="/admin/offres/<%= offre.id %>/delete" method="POST" onsubmit="return confirm('Confirmer la suppression ?');" style="display:inline;">
+                  <button type="submit" class="icon-action danger" style="border:none;background:none;cursor:pointer;">▥</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</main>
 
 <%- include('../partials/footer') %>
