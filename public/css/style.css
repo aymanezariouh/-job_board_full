@@ -165,6 +165,28 @@ p { margin: 0 0 12px; }
   display: inline-block; background: var(--green);
 }
 
+/* Follow / Favorite star button */
+.btn-suivi {
+  background: none;
+  border: none;
+  font-size: 1.35rem;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.15s;
+  padding: 2px;
+  line-height: 1;
+}
+.btn-suivi:hover {
+  color: #facc15;
+  transform: scale(1.2);
+}
+.btn-suivi.followed {
+  color: #facc15;
+}
+.btn-suivi.followed:hover {
+  color: #eab308;
+}
+
 .panel, .card {
   background: var(--white);
   border: 1px solid #f1f3f7;
