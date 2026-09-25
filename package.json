@@ -1,0 +1,35 @@
+{
+  "name": "job_board_full",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "db:seed": "node database/seed.js",
+    "db:reset": "node database/reset.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aymanezariouh/Job-Board-hamza.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/aymanezariouh/Job-Board-hamza/issues"
+  },
+  "homepage": "https://github.com/aymanezariouh/Job-Board-hamza#readme",
+  "dependencies": {
+    "dotenv": "^18.0.3",
+    "express": "^5.2.1",
+    "mysql2": "^3.24.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
