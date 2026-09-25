@@ -80,3 +80,11 @@ app.get('/test-repo', function(req, res) {
 app.listen(PORT, function() {
   console.log('Serveur démarré sur http://localhost:' + PORT);
 });
+// Page des offres suivies
+app.get('/suivi', function(req, res) {
+  // Récupère toutes les offres, le client affichera uniquement celles gardées en localStorage
+  offreRepo.findAll({}, function(err, offres) {
+    if (err) return res.status(500).send(err.message);
+    res.render('suivi', { offres: offres });
+  });
+});
