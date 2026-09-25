@@ -1,88 +1,163 @@
 <%- include('partials/header') %>
 
-<section class="search-section">
-  <h1>Trouvez votre stage ou alternance</h1>
-  <form action="/" method="GET" class="filter-form">
-    <div class="form-group">
-      <input 
-        type="text" 
-        name="search" 
-        placeholder="Mot-clé (titre, entreprise...)" 
-        value="<%= filters.search || '' %>"
-      >
+<main>
+  <!-- ================= HERO ================= -->
+
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow">
+        ● PROMO MERN 2026/2027 • PORTAIL ÉTUDIANT
+      </span>
+
+      <h1>Trouvez votre stage ou alternance web</h1>
+
+      <p class="lead">
+        Centralisez et explorez toutes les opportunités adaptées aux
+        apprenants en développement web.
+      </p>
+
+      <!-- ================= SEARCH / FILTERS ================= -->
+
+      <form class="panel search-panel" action="/" method="GET">
+        <div class="search-row">
+          <!-- Search Input -->
+          <input
+            name="search"
+            class="field"
+            type="search"
+            placeholder="⌕ Rechercher par poste, entreprise, mot-clé..."
+            value="<%= filters.search || '' %>"
+          />
+
+          <!-- Ville Select -->
+          <select name="ville" class="field">
+            <option value="">Toutes les villes</option>
+            <% villes.forEach(function(v) { %>
+              <option value="<%= v %>" <%= filters.ville === v ? 'selected' : '' %>><%= v %></option>
+            <% }); %>
+          </select>
+
+          <!-- Techno Select -->
+          <select name="technologie" class="field">
+            <option value="">Toutes les technos</option>
+            <% technologies.forEach(function(t) { %>
+              <option value="<%= t.nom %>" <%= filters.technologie === t.nom ? 'selected' : '' %>><%= t.nom %></option>
+            <% }); %>
+          </select>
+
+          <!-- Contrat Select -->
+          <select name="type_contrat" class="field">
+            <option value="">Tous les contrats</option>
+            <option value="Stage" <%= filters.type_contrat === 'Stage' ? 'selected' : '' %>>Stage</option>
+            <option value="Alternance" <%= filters.type_contrat === 'Alternance' ? 'selected' : '' %>>Alternance</option>
+          </select>
+
+          <!-- Tri Select -->
+          <select name="tri" class="field">
+            <option value="desc" <%= filters.tri !== 'asc' ? 'selected' : '' %>>Plus récentes</option>
+            <option value="asc" <%= filters.tri === 'asc' ? 'selected' : '' %>>Plus anciennes</option>
+          </select>
+
+          <!-- Actions -->
+          <button class="btn btn-primary" type="submit">
+            Filtrer
+          </button>
+          <a class="btn btn-secondary" href="/">
+            ↻ Réinitialiser
+          </a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= OFFRES ================= -->
+
+  <section class="container">
+    <!-- Résumé -->
+
+    <div class="offer-summary">
+      <div class="offer-summary-left">
+        <h2><%= offres.length %> offres disponibles</h2>
+
+        <span class="summary-chip">
+          <span class="status-dot"></span>
+          Mis à jour aujourd'hui
+        </span>
+      </div>
+
+      <div class="offer-summary-right muted small">
+        Statut :
+        <span class="summary-chip"> Affichage de toutes les annonces </span>
+      </div>
     </div>
 
-    <div class="form-group">
-      <select name="ville">
-        <option value="">Toutes les villes</option>
-        <% villes.forEach(function(v) { %>
-          <option value="<%= v %>" <%= filters.ville === v ? 'selected' : '' %>><%= v %></option>
-        <% }); %>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <select name="type_contrat">
-        <option value="">Tous les contrats</option>
-        <option value="Stage" <%= filters.type_contrat === 'Stage' ? 'selected' : '' %>>Stage</option>
-        <option value="Alternance" <%= filters.type_contrat === 'Alternance' ? 'selected' : '' %>>Alternance</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <select name="technologie">
-        <option value="">Toutes les technologies</option>
-        <% technologies.forEach(function(t) { %>
-          <option value="<%= t.nom %>" <%= filters.technologie === t.nom ? 'selected' : '' %>><%= t.nom %></option>
-        <% }); %>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <select name="tri">
-        <option value="desc" <%= filters.tri !== 'asc' ? 'selected' : '' %>>Plus récentes</option>
-        <option value="asc" <%= filters.tri === 'asc' ? 'selected' : '' %>>Plus anciennes</option>
-      </select>
-    </div>
-
-    <button type="submit" class="btn">Filtrer</button>
-    <a href="/" class="btn btn-secondary">Réinitialiser</a>
-  </form>
-</section>
-
-<section class="offers-section">
-  <h2>Offres disponibles (<%= offres.length %>)</h2>
-
-  <% if (offres.length === 0) { %>
-    <p class="no-results">Aucune offre ne correspond à vos critères de recherche.</p>
-  <% } else { %>
-    <div class="offers-grid">
-      <% offres.forEach(function(offre) { %>
-        <article class="card-offre">
-          <div class="card-header">
-            <span class="badge badge-<%= offre.type_contrat.toLowerCase() %>"><%= offre.type_contrat %></span>
-            <button class="btn-suivi" data-id="<%= offre.id %>" title="Suivre cette offre">★</button>
-          </div>
-          <h3><%= offre.titre %></h3>
-          <p class="company"><%= offre.entreprise_nom %> — <strong><%= offre.ville %></strong></p>
-          <p class="desc"><%= offre.description_courte %></p>
-          
-          <% if (offre.technologies) { %>
-            <div class="tech-tags">
-              <% offre.technologies.split(', ').forEach(function(tech) { %>
-                <span class="tag"><%= tech %></span>
-              <% }); %>
+    <% if (offres.length === 0) { %>
+      <div class="empty-box">
+        <div class="empty-inner">
+          <div class="empty-icon">⌕</div>
+          <h2>Aucune offre ne correspond à vos critères</h2>
+          <p class="muted">
+            Essayez de modifier ou réinitialiser vos filtres.
+          </p>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="jobs-grid">
+        <% offres.forEach(function(offre) { 
+             const contractClass = offre.type_contrat === "Stage" ? "badge-stage" : "badge-alternance";
+             const initials = offre.entreprise_nom ? offre.entreprise_nom.split(" ").map(w => w[0]).join("").toUpperCase() : "ENT";
+        %>
+          <article class="card job-card">
+            <div class="job-head">
+              <div class="job-title-wrap">
+                <div class="logo-box">
+                  <%= initials %>
+                </div>
+                <div>
+                  <h3><%= offre.titre %></h3>
+                  <div class="company-line">
+                    <%= offre.entreprise_nom %> • <%= offre.ville %>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <button class="btn-suivi" data-id="<%= offre.id %>" title="Suivre cette offre">★</button>
+                <span class="badge badge-contract <%= contractClass %>">
+                  <%= offre.type_contrat %>
+                </span>
+              </div>
             </div>
-          <% } %>
 
-          <div class="card-footer">
-            <small>Publiée le <%= new Date(offre.date_publication).toLocaleDateString('fr-FR') %></small>
-            <a href="/offres/<%= offre.id %>" class="btn-link">Voir l'offre &rarr;</a>
-          </div>
-        </article>
-      <% }); %>
-    </div>
-  <% } %>
-</section>
+            <p class="job-description">
+              <%= offre.description_courte %>
+            </p>
+
+            <div class="badges">
+              <% if (offre.technologies) { %>
+                <% offre.technologies.split(', ').forEach(function(tech) { %>
+                  <span class="badge"><%= tech %></span>
+                <% }); %>
+              <% } %>
+            </div>
+
+            <div class="job-footer">
+              <div class="job-date">
+                <%= new Date(offre.date_publication).toLocaleDateString('fr-FR') %>
+              </div>
+              <div class="job-actions">
+                <a
+                  class="btn btn-primary"
+                  href="/offres/<%= offre.id %>"
+                >
+                  Voir l'offre →
+                </a>
+              </div>
+            </div>
+          </article>
+        <% }); %>
+      </div>
+    <% } %>
+  </section>
+</main>
 
 <%- include('partials/footer') %>
