@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+
+<section class="admin-dashboard">
+  <div class="admin-header">
+    <h1>Administration des offres</h1>
+    <a href="/admin/offres/nouveau" class="btn btn-primary">+ Déposer / Créer une offre</a>
+  </div>
+
+  <table class="table-admin">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Titre</th>
+        <th>Entreprise</th>
+        <th>Type</th>
+        <th>Ville</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% offres.forEach(function(offre) { %>
+        <tr>
+          <td><%= offre.id %></td>
+          <td><strong><%= offre.titre %></strong></td>
+          <td><%= offre.entreprise_nom %></td>
+          <td><span class="badge badge-<%= offre.type_contrat.toLowerCase() %>"><%= offre.type_contrat %></span></td>
+          <td><%= offre.ville %></td>
+          <td><%= new Date(offre.date_publication).toLocaleDateString('fr-FR') %></td>
+          <td class="table-actions">
+            <a href="/admin/offres/<%= offre.id %>/edit" class="btn-sm btn-edit">Modifier</a>
+            <form action="/admin/offres/<%= offre.id %>/delete" method="POST" onsubmit="return confirm('Confirmer la suppression ?');" style="display:inline;">
+              <button type="submit" class="btn-sm btn-delete">Supprimer</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</section>
+
+<%- include('../partials/footer') %>

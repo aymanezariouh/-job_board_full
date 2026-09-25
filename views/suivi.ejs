@@ -1,0 +1,39 @@
+<%- include('partials/header') %>
+
+<section class="container" id="suivi-container">
+  <h1>Mes offres suivies</h1>
+  <p>Retrouvez ici les offres que vous avez sélectionnées sur ce navigateur.</p>
+
+  <p id="no-suivi-msg" class="no-results" style="display: none;">
+    Vous n'avez aucune offre suivie pour le moment.
+  </p>
+
+  <div class="offers-grid">
+    <% offres.forEach(function(offre) { %>
+      <article class="card-offre" data-id="<%= offre.id %>" style="display: none;">
+        <div class="card-header">
+          <span class="badge badge-<%= offre.type_contrat.toLowerCase() %>"><%= offre.type_contrat %></span>
+          <button class="btn-suivi" data-id="<%= offre.id %>">★ Suivie</button>
+        </div>
+        <h3><%= offre.titre %></h3>
+        <p class="company"><%= offre.entreprise_nom %> — <strong><%= offre.ville %></strong></p>
+        <p class="desc"><%= offre.description_courte %></p>
+        
+        <% if (offre.technologies) { %>
+          <div class="tech-tags">
+            <% offre.technologies.split(', ').forEach(function(tech) { %>
+              <span class="tag"><%= tech %></span>
+            <% }); %>
+          </div>
+        <% } %>
+
+        <div class="card-footer">
+          <small>Publiée le <%= new Date(offre.date_publication).toLocaleDateString('fr-FR') %></small>
+          <a href="/offres/<%= offre.id %>" class="btn-link">Voir l'offre &rarr;</a>
+        </div>
+      </article>
+    <% }); %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
