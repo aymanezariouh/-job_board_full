@@ -1,0 +1,81 @@
+<%- include('../partials/header') %>
+
+<section class="form-container">
+  <h1><%= isEdit ? 'Modifier l\'offre' : 'Créer une nouvelle offre' %></h1>
+
+  <form action="<%= isEdit ? '/admin/offres/' + offre.id + '/edit' : '/admin/offres' %>" method="POST" class="crud-form">
+    <div class="form-group">
+      <label for="titre">Titre du poste *</label>
+      <input type="text" id="titre" name="titre" required value="<%= offre ? offre.titre : '' %>">
+    </div>
+
+    <div class="form-group">
+      <label for="entreprise_id">Entreprise *</label>
+      <select id="entreprise_id" name="entreprise_id" required>
+        <option value="">Sélectionner une entreprise</option>
+        <% entreprises.forEach(function(e) { %>
+          <option value="<%= e.id %>" <%= (offre && offre.entreprise_id == e.id) ? 'selected' : '' %>>
+            <%= e.nom %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="ville">Ville *</label>
+      <input type="text" id="ville" name="ville" required value="<%= offre ? offre.ville : '' %>">
+    </div>
+
+    <div class="form-group">
+      <label for="type_contrat">Type de contrat *</label>
+      <select id="type_contrat" name="type_contrat" required>
+        <option value="Stage" <%= (offre && offre.type_contrat === 'Stage') ? 'selected' : '' %>>Stage</option>
+        <option value="Alternance" <%= (offre && offre.type_contrat === 'Alternance') ? 'selected' : '' %>>Alternance</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Technologies associées</label>
+      <div class="checkbox-group">
+        <% technologies.forEach(function(tech) { %>
+          <label class="checkbox-inline">
+            <input 
+              type="checkbox" 
+              name="technologies" 
+              value="<%= tech.id %>" 
+              <%= (selectedTechs && selectedTechs.includes(tech.id)) ? 'checked' : '' %>
+            >
+            <%= tech.nom %>
+          </label>
+        <% }); %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description_courte">Description courte *</label>
+      <textarea id="description_courte" name="description_courte" rows="2" required><%= offre ? offre.description_courte : '' %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="description_detaillee">Description détaillée de la mission *</label>
+      <textarea id="description_detaillee" name="description_detaillee" rows="5" required><%= offre ? offre.description_detaillee : '' %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="profil_recherche">Profil recherché</label>
+      <textarea id="profil_recherche" name="profil_recherche" rows="3"><%= offre ? offre.profil_recherche : '' %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="lien_candidature">Contact ou lien de candidature *</label>
+      <input type="text" id="lien_candidature" name="lien_candidature" required value="<%= offre ? offre.lien_candidature : '' %>">
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary"><%= isEdit ? 'Enregistrer les modifications' : 'Publier l\'offre' %></button>
+      <a href="/admin/offres" class="btn btn-secondary">Annuler</a>
+    </div>
+  </form>
+</section>
+
+<%- include('../partials/footer') %>
