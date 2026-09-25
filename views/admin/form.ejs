@@ -1,81 +1,142 @@
 <%- include('../partials/header') %>
 
-<section class="form-container">
-  <h1><%= isEdit ? 'Modifier l\'offre' : 'Créer une nouvelle offre' %></h1>
-
-  <form action="<%= isEdit ? '/admin/offres/' + offre.id + '/edit' : '/admin/offres' %>" method="POST" class="crud-form">
-    <div class="form-group">
-      <label for="titre">Titre du poste *</label>
-      <input type="text" id="titre" name="titre" required value="<%= offre ? offre.titre : '' %>">
-    </div>
-
-    <div class="form-group">
-      <label for="entreprise_id">Entreprise *</label>
-      <select id="entreprise_id" name="entreprise_id" required>
-        <option value="">Sélectionner une entreprise</option>
-        <% entreprises.forEach(function(e) { %>
-          <option value="<%= e.id %>" <%= (offre && offre.entreprise_id == e.id) ? 'selected' : '' %>>
-            <%= e.nom %>
-          </option>
-        <% }); %>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="ville">Ville *</label>
-      <input type="text" id="ville" name="ville" required value="<%= offre ? offre.ville : '' %>">
-    </div>
-
-    <div class="form-group">
-      <label for="type_contrat">Type de contrat *</label>
-      <select id="type_contrat" name="type_contrat" required>
-        <option value="Stage" <%= (offre && offre.type_contrat === 'Stage') ? 'selected' : '' %>>Stage</option>
-        <option value="Alternance" <%= (offre && offre.type_contrat === 'Alternance') ? 'selected' : '' %>>Alternance</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Technologies associées</label>
-      <div class="checkbox-group">
-        <% technologies.forEach(function(tech) { %>
-          <label class="checkbox-inline">
-            <input 
-              type="checkbox" 
-              name="technologies" 
-              value="<%= tech.id %>" 
-              <%= (selectedTechs && selectedTechs.includes(tech.id)) ? 'checked' : '' %>
-            >
-            <%= tech.nom %>
-          </label>
-        <% }); %>
+<main class="page-space">
+  <div class="container two-column-page">
+    <section>
+      <span class="eyebrow">♙ Espace Candidats & Recruteurs</span>
+      <h1><%= isEdit ? 'Modifier l\'offre' : 'Déposer une offre' %></h1>
+      <p class="muted">Partagez une opportunité de stage ou d'alternance avec les apprenants de la promotion.</p>
+      
+      <div class="notice">
+        <span style="color:#064bc2">ⓘ</span>
+        <div>
+          <strong>Publication instantanée</strong>
+          <p class="muted small">Publication immédiate sans inscription requise. Remplissez simplement les détails du poste ci-dessous pour diffusion automatique aux apprenants.</p>
+        </div>
       </div>
-    </div>
-
-    <div class="form-group">
-      <label for="description_courte">Description courte *</label>
-      <textarea id="description_courte" name="description_courte" rows="2" required><%= offre ? offre.description_courte : '' %></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="description_detaillee">Description détaillée de la mission *</label>
-      <textarea id="description_detaillee" name="description_detaillee" rows="5" required><%= offre ? offre.description_detaillee : '' %></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="profil_recherche">Profil recherché</label>
-      <textarea id="profil_recherche" name="profil_recherche" rows="3"><%= offre ? offre.profil_recherche : '' %></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="lien_candidature">Contact ou lien de candidature *</label>
-      <input type="text" id="lien_candidature" name="lien_candidature" required value="<%= offre ? offre.lien_candidature : '' %>">
-    </div>
-
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary"><%= isEdit ? 'Enregistrer les modifications' : 'Publier l\'offre' %></button>
-      <a href="/admin/offres" class="btn btn-secondary">Annuler</a>
-    </div>
-  </form>
-</section>
+      
+      <form class="panel form-card" action="<%= isEdit ? '/admin/offres/' + offre.id + '/edit' : '/admin/offres' %>" method="POST">
+        <div class="form-grid">
+          
+          <div class="form-group">
+            <label>Entreprise <span class="required">*</span></label>
+            <select id="entreprise_id" name="entreprise_id" class="field" required>
+              <option value="">Sélectionner une entreprise</option>
+              <% entreprises.forEach(function(e) { %>
+                <option value="<%= e.id %>" <%= (offre && offre.entreprise_id == e.id) ? 'selected' : '' %>>
+                  <%= e.nom %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Titre du poste <span class="required">*</span></label>
+            <input class="field" name="titre" required value="<%= offre ? offre.titre : '' %>" placeholder="Ex: Développeur Fullstack MERN">
+          </div>
+          
+          <div class="form-group">
+            <label>Ville <span class="required">*</span></label>
+            <input class="field" name="ville" required value="<%= offre ? offre.ville : '' %>" placeholder="Ex: Casablanca">
+          </div>
+          
+          <div class="form-group">
+            <label>Type de contrat <span class="required">*</span></label>
+            <div class="radio-row">
+              <label><input type="radio" name="type_contrat" value="Stage" <%= (!offre || offre.type_contrat === 'Stage') ? 'checked' : '' %>> Stage</label>
+              <label><input type="radio" name="type_contrat" value="Alternance" <%= (offre && offre.type_contrat === 'Alternance') ? 'checked' : '' %>> Alternance</label>
+            </div>
+          </div>
+          
+          <div class="form-group full">
+            <div class="help-row">
+              <label>Technologies associées</label>
+            </div>
+            <div class="checkbox-group" style="display:flex; flex-wrap:wrap; gap:10px; margin-top:5px;">
+              <% technologies.forEach(function(tech) { %>
+                <label class="checkbox-inline" style="background:#f1f5f9; padding:5px 10px; border-radius:4px; font-size:13px; cursor:pointer;">
+                  <input 
+                    type="checkbox" 
+                    name="technologies" 
+                    value="<%= tech.id %>" 
+                    <%= (typeof selectedTechs !== 'undefined' && selectedTechs.includes(tech.id)) ? 'checked' : '' %>
+                  >
+                  <%= tech.nom %>
+                </label>
+              <% }); %>
+            </div>
+          </div>
+          
+          <div class="form-group full">
+            <div class="help-row">
+              <label>Description courte <span class="required">*</span></label>
+              <span class="muted">Affichée sur les fiches de recherche</span>
+            </div>
+            <input class="field" name="description_courte" required value="<%= offre ? offre.description_courte : '' %>" placeholder="Résumé en une phrase pour la carte d'aperçu (max 120 car.)">
+          </div>
+          
+          <div class="form-group full">
+            <label>Description complète de la mission <span class="required">*</span></label>
+            <textarea class="field" name="description_detaillee" required placeholder="Détaillez les projets, objectifs attendus..."><%= offre ? offre.description_detaillee : '' %></textarea>
+          </div>
+          
+          <div class="form-group full">
+            <label>Profil recherché <span class="required">*</span></label>
+            <textarea class="field" name="profil_recherche" required placeholder="Niveau de diplôme en cours, autonomie..."><%= offre ? offre.profil_recherche : '' %></textarea>
+          </div>
+          
+          <div class="form-group full">
+            <div class="help-row">
+              <label>Contact ou lien de candidature <span class="required">*</span></label>
+              <strong style="color:#064bc2">Email direct ou URL HTTPS</strong>
+            </div>
+            <input class="field" name="lien_candidature" required value="<%= offre ? offre.lien_candidature : '' %>" placeholder="@ rh@entreprise.ma ou https://jobs.entreprise.ma/recrutement">
+          </div>
+          
+        </div>
+        
+        <div class="form-actions">
+          <a href="/admin/offres" class="btn btn-secondary">Annuler</a>
+          <button type="submit" class="btn btn-primary">▷ <%= isEdit ? 'Enregistrer les modifications' : 'Publier l\'offre' %></button>
+        </div>
+      </form>
+    </section>
+    
+    <aside class="preview-column">
+      <div class="preview-head">
+        <strong>APERÇU EN DIRECT</strong>
+        <span class="summary-chip">Carte de recherche</span>
+      </div>
+      <article class="panel preview-card">
+        <div class="job-head">
+          <div class="job-title-wrap">
+            <div class="logo-box">A</div>
+            <div>
+              <strong>Votre Entreprise</strong>
+              <h3>Intitulé de poste</h3>
+            </div>
+          </div>
+          <span class="badge badge-stage">Stage</span>
+        </div>
+        <div class="meta small muted" style="margin:18px 0">
+          ⌖ Ville (Non définie) &nbsp;&nbsp; ◷ Aujourd'hui
+        </div>
+        <p class="small">La courte description apparaîtra ici pour guider les étudiants au premier coup d'œil.</p>
+        <div class="badges">
+          <span class="badge">MERN</span>
+        </div>
+      </article>
+      
+      <section class="advice-card">
+        <h3>♢ Conseils pour un recrutement réussi</h3>
+        <ul class="small">
+          <li>Précisez les technologies clés du cursus pour cibler les profils formés.</li>
+          <li>Indiquez si un encadrement par un tuteur technique senior est prévu.</li>
+          <li>L'offre reste modifiable ou retirable à tout instant.</li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+</main>
 
 <%- include('../partials/footer') %>

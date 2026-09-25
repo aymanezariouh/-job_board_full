@@ -1,22 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portail Stages & Alternances</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-  <header>
-    <nav class="navbar">
-      <div class="logo">
-        <a href="/">JobBoard MERN</a>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>JobBoard - Portail Stages & Alternances</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+
+  <body>
+    <!-- ================= HEADER ================= -->
+
+    <header class="site-header">
+      <div class="container navbar">
+        <a href="/" class="brand">
+          <span class="brand-mark">▣</span>
+
+          <span>
+            <span class="brand-title">JobBoard</span>
+
+            <span class="brand-subtitle" style="display: block">
+              Portail Stages & Alternances
+            </span>
+          </span>
+        </a>
+
+        <nav class="desktop-nav" aria-label="Navigation principale">
+          <a class="nav-link active" href="/"> Offres </a>
+
+          <a class="nav-link" href="/admin/offres/nouveau"> Déposer une offre </a>
+
+          <a class="nav-link" href="/suivi"> Offres suivies </a>
+        </nav>
+
+        <div style="display: flex; align-items: center; gap: 10px">
+          <a class="admin-pill" href="/admin/offres">
+            ♙ Administration
+            <small>Admin</small>
+          </a>
+
+          <button class="user-button" type="button" aria-label="Utilisateur">
+            ♙
+          </button>
+
+          <button class="mobile-menu" type="button" aria-label="Menu">
+            ☰
+          </button>
+        </div>
       </div>
-      <ul class="nav-links">
-        <li><a href="/">Offres</a></li>
-        <li><a href="/suivi">Offres suivies</a></li>
-        <li><a href="/admin/offres">Administration</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main class="container">
+    </header>
